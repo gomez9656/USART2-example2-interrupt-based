@@ -30,8 +30,9 @@ void HAL_UART_MspInit(UART_HandleTypeDef *huart){
 
 	GPIO_InitTypeDef gpio_uart;
 
-	//1. Enable the clock
+	//1. Enable the clock for USART2 and GPIOA peripheral
 	__HAL_RCC_USART2_CLK_ENABLE();
+	__HAL_RCC_GPIOA_CLK_ENABLE();
 
 	//2. Pin muxing configuration
 	gpio_uart.Pin = GPIO_PIN_2;

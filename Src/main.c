@@ -7,6 +7,7 @@
 
 #include "stm32f4xx.h"
 #include "main.h"
+#include <string.h>
 
 /*
  * Functions prototypes
@@ -18,6 +19,8 @@ void Error_handler();
 
 UART_HandleTypeDef huart2; //Handle of UART 2
 
+char *user_data = "The application is up!\r\n";
+
 int main(){
 
 	/* Basic initialization */
@@ -25,6 +28,14 @@ int main(){
 	SystemCoreClockConfig();
 
 	UART2_Init();
+
+	uint16_t len_of_data = strlen(user_data);
+	if(HAL_UART_Transmit(&huart2, (uint8_t*)user_data, len_of_data, HAL_MAX_DELAY) != HAL_OK){
+
+		Error_handler();
+	}
+
+	while(1);
 
 	return 0;
 }
