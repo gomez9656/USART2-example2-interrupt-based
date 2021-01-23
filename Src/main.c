@@ -30,10 +30,7 @@ int main(){
 	UART2_Init();
 
 	uint16_t len_of_data = strlen(user_data);
-	if(HAL_UART_Transmit(&huart2, (uint8_t*)user_data, len_of_data, HAL_MAX_DELAY) != HAL_OK){
-
-		Error_handler();
-	}
+	HAL_UART_Transmit(&huart2, (uint8_t*)user_data, len_of_data, HAL_MAX_DELAY);
 
 	while(1);
 
