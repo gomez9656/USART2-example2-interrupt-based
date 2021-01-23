@@ -9,6 +9,8 @@
 
 void HAL_MspInit(void)
 {
+	//Low level initializations
+
 	//1. Set up priority grouping
 	HAL_NVIC_SetPriorityGrouping(NVIC_PRIORITYGROUP_4);
 
