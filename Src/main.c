@@ -12,12 +12,21 @@
 /*
  * Functions prototypes
  */
+
+#define TRUE	1
+#define FALSE	0
+
 void SystemCoreClockConfig();
 void UART2_Init();
 void Error_handler();
 uint8_t conver_to_capital(uint8_t data);
 
 UART_HandleTypeDef huart2; //Handle of UART 2
+
+uint8_t data_buffer[100];
+uint8_t received_data;
+uint32_t count = 0;
+uint8_t reception_complete = FALSE;
 
 char *user_data = "The application is up!\r\n";
 
@@ -32,24 +41,10 @@ int main(){
 	uint16_t len_of_data = strlen(user_data);
 	HAL_UART_Transmit(&huart2, (uint8_t*)user_data, len_of_data, HAL_MAX_DELAY);
 
-	uint8_t received_data;
-	uint8_t data_buffer[100];
-	uint32_t count = 0;
-	while(1){
+	while(reception_complete != TRUE){
 
-		HAL_UART_Receive(&huart2, &received_data, 1, HAL_MAX_DELAY); //Only reads 1 byte data
-
-		if(received_data == '\r'){
-
-			break;
-		}else{
-
-			data_buffer[count++] = conver_to_capital(received_data);
-		}
+		HAL_UART_Receive_IT(&huart2, &received_data, 1);
 	}
-
-	data_buffer[count++] = '\r';
-	HAL_UART_Transmit(&huart2, data_buffer, count, HAL_MAX_DELAY);
 
 	while(1);
 
@@ -85,6 +80,19 @@ void UART2_Init(){
 
 		//There is a problem
 		Error_handler();
+	}
+}
+
+void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart){
+
+	if(received_data == '\r'){
+
+		reception_complete = TRUE; //To stop calling HAL_UART_Receive_IT()
+		data_buffer[count++] = '\r';
+		HAL_UART_Transmit(huart, data_buffer, count, HAL_MAX_DELAY);
+	}else{
+
+		data_buffer[count++] = received_data;
 	}
 }
 

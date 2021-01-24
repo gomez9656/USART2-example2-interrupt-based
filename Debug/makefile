@@ -28,13 +28,13 @@ endif
 # Add inputs and outputs from these tool invocations to the build variables 
 
 # All Target
-all: USART2-example.elf
+all: USART2-example2_interrupt_based.elf
 
 # Tool invocations
-USART2-example.elf: $(OBJS) $(USER_OBJS) ../STM32F411RETx_FLASH.ld
+USART2-example2_interrupt_based.elf: $(OBJS) $(USER_OBJS) ../STM32F411RETx_FLASH.ld
 	@echo 'Building target: $@'
 	@echo 'Invoking: MCU GCC Linker'
-	arm-none-eabi-gcc -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16 -specs=nosys.specs -specs=nano.specs -T"../STM32F411RETx_FLASH.ld" -Wl,-Map=output.map -Wl,--gc-sections -o "USART2-example.elf" @"objects.list" $(USER_OBJS) $(LIBS) -lm
+	arm-none-eabi-gcc -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16 -specs=nosys.specs -specs=nano.specs -T"../STM32F411RETx_FLASH.ld" -Wl,-Map=output.map -Wl,--gc-sections -o "USART2-example2_interrupt_based.elf" @"objects.list" $(USER_OBJS) $(LIBS) -lm
 	@echo 'Finished building target: $@'
 	@echo ' '
 	$(MAKE) --no-print-directory post-build
@@ -46,8 +46,8 @@ clean:
 
 post-build:
 	-@echo 'Generating hex and Printing size information:'
-	arm-none-eabi-objcopy -O ihex "USART2-example.elf" "USART2-example.hex"
-	arm-none-eabi-size "USART2-example.elf"
+	arm-none-eabi-objcopy -O ihex "USART2-example2_interrupt_based.elf" "USART2-example2_interrupt_based.hex"
+	arm-none-eabi-size "USART2-example2_interrupt_based.elf"
 	-@echo ' '
 
 .PHONY: all clean dependents
